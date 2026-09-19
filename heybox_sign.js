@@ -75,8 +75,8 @@ function extractTaskList(payload) {
         .map((award) => {
           const desc = tools.toText(award.desc);
           const icon = tools.toText(award.icon);
-          if (icon.includes("b9aca51c")) return `${desc}H币`;
-          if (icon.includes("c10d89ae")) return `${desc}经验`;
+          if (icon.includes("b9aca51c")) return `${desc}经验`;
+          if (icon.includes("c10d89ae")) return `${desc}H币`;
           if (icon.includes("e63b192a")) return `${desc}盒电`;
           return desc;
         })
