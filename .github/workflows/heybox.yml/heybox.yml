@@ -1,0 +1,38 @@
+name: heybox daily
+
+on:
+  schedule:
+      # 北京时间每天 00:30（GitHub cron 为 UTC，16:30 UTC = 次日 00:30 CST）
+          - cron: '30 16 * * *'
+            workflow_dispatch:
+
+            jobs:
+              heybox:
+                  runs-on: ubuntu-latest
+                      timeout-minutes: 30
+                          env:
+                                HEYBOX_CK: ${{ secrets.HEYBOX_CK }}
+                                    steps:
+                                          - name: 检出代码
+                                                  uses: actions/checkout@v4
+
+                                                        - name: 安装 Node.js
+                                                                uses: actions/setup-node@v4
+                                                                        with:
+                                                                                  node-version: 20
+                                                                                            cache: npm
+
+                                                                                                  - name: 安装依赖
+                                                                                                          run: npm ci
+                                                                                                          
+                                                                                                                - name: 每日签到 + 分享任务
+                                                                                                                        run: node heybox_sign.js
+                                                                                                                                if: always()
+                                                                                                                                
+                                                                                                                                      - name: 普通领券
+                                                                                                                                              run: node heybox_claim.js
+                                                                                                                                                      if: always()
+                                                                                                                                                      
+                                                                                                                                                            - name: 0元抽奖盒券
+                                                                                                                                                                    run: node heybox_roll.js
+                                                                                                                                                                            if: always()
