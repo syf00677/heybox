@@ -1,0 +1,33 @@
+name: heybox daily
+
+on:
+  schedule:
+    - cron: '30 16 * * *'
+  workflow_dispatch:
+
+jobs:
+  heybox:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      heybox_ck: ${{ secrets.HEYBOX_CK }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Daily sign-in
+        run: node heybox_sign.js
+        if: always()
+
+      - name: Lottery
+        run: node heybox_roll.js
+        if: always()
